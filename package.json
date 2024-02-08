@@ -1,0 +1,14 @@
+{
+  "name": "character-grid-minigame",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "backend-dev": "cd backend && npm run dev",
+    "frontend-dev": "cd frontend && npm run dev",
+    "dev": "concurrently npm:backend-dev npm:frontend-dev",
+    "build": ""
+  },
+  "keywords": [],
+  "author": "Lendruk (Tiago Gomes)",
+  "license": "MIT"
+}

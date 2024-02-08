@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    // typescript options here
+    "strict": true,
+    "noImplicitAny": true,
+    "outDir": "./dist",
+    "rootDir": "./src"
+  },
+}
