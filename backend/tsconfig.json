@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
-    // typescript options here
     "strict": true,
     "noImplicitAny": true,
+    "esModuleInterop": true,
     "outDir": "./dist",
-    "rootDir": "./src"
+    "rootDir": "./src",
   },
+  "exclude": ["./drizzle.config.ts"]
 }

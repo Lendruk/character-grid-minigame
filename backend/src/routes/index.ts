@@ -1,3 +1,4 @@
 import gameRoutes from './game';
+import paymentRoutes from './payments';
 
-export default [...gameRoutes];
+export default [...gameRoutes, ...paymentRoutes];
