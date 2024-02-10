@@ -34,7 +34,7 @@ export class Game {
 	 * @param systemSeconds the current system seconds
 	 * @param bias an optional character to be used as a weighted bias
 	 */
-	public refresh(systemSeconds: number,bias?: string): void {
+	public refresh(systemSeconds: number, bias?: string): void {
 		if(bias) {
 			this.updateCharacterBias(bias);
 		}
@@ -69,13 +69,15 @@ export class Game {
 	 * Updates the character bias in the game, taking into the consideration the 4 second throttle
 	 * @param bias a new character bias
 	 */
-	private updateCharacterBias(bias: string): void {
+	public updateCharacterBias(bias: string): boolean {
 		if(!this.bias || (this.bias && Date.now() - this.bias.updatedAt > Game.CHARACTER_BIAS_REFRESH_TIME)) {
 			this.bias = {
-				biasValue: bias,
+				biasValue: bias.charAt(0),
 				updatedAt: Date.now(),
 			};
+			return true;
 		}
+		return false;
 	}
 
 	/**

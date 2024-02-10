@@ -4,8 +4,10 @@
 
   $: formattedDate = (() => {
     const date = new Date(time);
-
-    return `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+    const formattedHours = `${date.getHours() <= 9 ? '0': ''}${date.getHours()}`;
+    const formattedMinutes = `${date.getMinutes() <= 9 ? '0': ''}${date.getMinutes()}`;
+    const formattedSeconds = `${date.getSeconds() <= 9 ? '0': ''}${date.getSeconds()}`;
+    return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
   })()
 </script>
 

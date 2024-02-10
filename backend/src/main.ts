@@ -2,17 +2,32 @@ import Fastify from 'fastify';
 import wb from '@fastify/websocket';
 import cors from '@fastify/cors';
 import routes from './routes';
-const fastify = Fastify({
+import { gameSession } from './lib/GameSession';
+
+const app = Fastify({
 	logger: true
 });
 
-fastify.register(wb);
-fastify.register(cors);
+app.register(wb);
+app.register(cors);
 
 for(const route of routes) {
-	fastify.route(route);
+	app.register(async function (fastify) {
+		fastify.route(route);
+	});
 }
 
-fastify.listen({ port: 8080 }, (err) => {
+app.register(async (fastify) => {
+	fastify.websocketServer.on('connection', (client) => {
+		console.log('connection open');
+		gameSession.connections.add(client);
+		client.on('close', () => {
+			console.log('connection closed');
+			gameSession.connections.delete(client);
+		});
+	});
+});
+
+app.listen({ port: 8080 }, (err) => {
 	if (err) throw err;
 });
