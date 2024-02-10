@@ -13,7 +13,7 @@ const createPayments = async (request: FastifyRequest, reply: FastifyReply) => {
 	}).parse(body);
 
 	const newPayment = await db.insert(payments).values({ amount: validatedBody.amount, code: validatedBody.code, name: validatedBody.name }).returning();
-	reply.send({ payment: newPayment });
+	reply.send({ payment: newPayment[0] });
 };
 
 export default {
