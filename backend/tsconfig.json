@@ -3,6 +3,8 @@
     // typescript options here
     "strict": true,
     "noImplicitAny": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
     "outDir": "./dist",
     "rootDir": "./src"
   },

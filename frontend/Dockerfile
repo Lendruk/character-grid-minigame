@@ -1,8 +1,18 @@
-FROM node:18.16.1-alpine3.18
-# RUN mkdir -p /minigame/frontend
+FROM node:18.16.1-alpine3.18 as build
+WORKDIR /app
 COPY ./package*.json ./
-COPY ./src ./
+COPY ./src ./src
+COPY ./vite.config.ts ./
+COPY ./index.html ./
+COPY ./tsconfig.json ./
+COPY ./tailwind.config.js ./
+COPY ./tsconfig.node.json ./
+COPY ./svelte.config.js ./
+COPY ./postcss.config.js ./
 RUN npm install
-CMD ["npm run", "build"]
-WORKDIR /var/www/html/
-COPY ./dist ./
+RUN npm run build
+
+FROM nginx:stable-alpine
+COPY --from=build /app/dist /var/www/html
+EXPOSE 80
+CMD [ "nginx", "-g", "daemon off;" ]
