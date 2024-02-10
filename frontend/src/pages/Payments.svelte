@@ -46,13 +46,13 @@
   <div class="flex gap-4 mb-10 mt-10">
     <div>
       <p>Name</p>
-      <input type="text" placeholder="name" bind:value={paymentName} />
+      <input disabled={!$gameStore} class={`${!$gameStore ? 'cursor-not-allowed' : 'cursor-auto'}`} type="text" placeholder="name" bind:value={paymentName} />
     </div>
     <div>
       <p>Amount</p>
-      <input type="number" placeholder="amount" bind:value={paymentAmount} />
+      <input disabled={!$gameStore} class={`${!$gameStore ? 'cursor-not-allowed' : 'cursor-auto'}`} type="number" placeholder="amount" bind:value={paymentAmount} />
     </div>
-    <button on:click={createPayment}>+ Add</button>
+    <button disabled={!$gameStore} class={`${!$gameStore ? 'cursor-not-allowed' : 'cursor-auto'}`} on:click={createPayment}>+ Add</button>
   </div>
   <div>
     <SimpleTable
