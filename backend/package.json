@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc",
     "dev": "nodemon ./src/main.ts",
-    "generate:drizzle": "drizzle-kit generate:sqlite --config=./drizzle.config.ts"
+    "generate:drizzle": "drizzle-kit generate:sqlite --config=./drizzle.config.ts",
+    "test": "vitest"
   },
   "keywords": [],
   "author": "",
@@ -29,6 +30,7 @@
     "eslint": "^8.56.0",
     "nodemon": "^3.0.3",
     "ts-node": "^10.9.2",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "vitest": "^1.2.2"
   }
 }
