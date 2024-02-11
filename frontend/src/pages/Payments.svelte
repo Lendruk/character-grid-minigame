@@ -1,18 +1,18 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import LiveCodeDisplay from "../lib/LiveCodeDisplay.svelte";
-  import type { Payment } from "../types/Payment";
+  import type { Payment, PaymentWithCalculatedGridSize } from "../types/Payment";
   import SimpleTable from "../lib/SimpleTable.svelte";
   import { buildPaymentsUrl } from "../endpoints";
   import { gameStore } from "../store";
 
-  let payments: Payment[] = [];
+  let payments: PaymentWithCalculatedGridSize[] = [];
   let paymentName: string = "";
   let paymentAmount: number | undefined;
   onMount(async () => {
     const response = await fetch(buildPaymentsUrl());
-    const { payments: fetchedPayments } = await response.json();
-    payments = fetchedPayments;
+    const { payments: fetchedPayments } = await response.json() as { payments: Payment[] };
+    payments = fetchedPayments.map(payment => ({ ...payment, gridSize: payment.grid.sizeX * payment.grid.sizeY }));
   });
 
   async function createPayment() {
@@ -29,8 +29,8 @@
       }),
     });
 
-    const { payment } = await response.json();
-    payments.push(payment);
+    const { payment } = await response.json() as { payment: Payment };
+    payments.push({...payment, gridSize: payment.grid.sizeX * payment.grid.sizeY });
     
     // This is a svelte quirk for triggering hydration
     // This is fixed in svelte 5 (not out yet)
@@ -57,7 +57,7 @@
   <div>
     <SimpleTable
       rows={payments}
-      cols={[{ display: "Name", key: "name", spacing: "0.75" }, { display: "Amount", key: "amount" }, { display: "Code", key: "code" }]}
+      cols={[{ display: "Name", key: "name", spacing: "0.75" }, { display: "Amount", key: "amount" }, { display: "Code", key: "code" }, { display: "Grid", key: "gridSize" }]}
     />
   </div>
 </div>

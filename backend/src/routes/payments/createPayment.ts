@@ -1,9 +1,9 @@
 import { FastifyReply, FastifyRequest, RouteOptions } from 'fastify';
 import { z } from 'zod';
 import { db } from '../../db/db';
-import { payments } from '../../db/schema';
 import { GameSession, gameSessionController } from '../../lib/GameSessionController';
 import { GameGrids } from '../../lib/models/GameGrids';
+import { Payments } from '../../lib/models/Payments';
 
 const createPayments = async (request: FastifyRequest, reply: FastifyReply) => {
 	const body = JSON.parse(request.body as string);
@@ -17,9 +17,9 @@ const createPayments = async (request: FastifyRequest, reply: FastifyReply) => {
 			code: z.string()
 		}).parse(body);
 		
-		const storedGrid = await GameGrids.New(db, gameGrid.getCells(), gameGrid.size);
-		const newPayment = await db.insert(payments).values({ amount: validatedBody.amount, code: validatedBody.code, name: validatedBody.name, gridId: storedGrid.id }).returning();
-		reply.send({ payment: newPayment[0] });
+		const storedGrid = await GameGrids.new(db, gameGrid.getCells(), gameGrid.size);
+		const newPayment = await Payments.new(db, validatedBody.amount, validatedBody.code, validatedBody.name, storedGrid.id);
+		reply.send({ payment: newPayment });
 	} catch(error) {
 		reply.status(400).send('Cannot create a payment without a session in progress');
 	}
