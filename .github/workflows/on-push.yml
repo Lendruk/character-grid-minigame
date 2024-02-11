@@ -1,0 +1,23 @@
+name: On push
+on:
+  push:
+    branches: ['*']
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v4.0.2
+      
+      - name: Install dependencies
+        run: npm run prepare
+
+      - name: Check build
+        run: npm run build
+
+      - name: Check lint
+        run: npm run lint
+      
+      - name: Check tests
+        run: npm run test

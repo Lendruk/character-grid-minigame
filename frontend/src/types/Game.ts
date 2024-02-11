@@ -1,4 +1,4 @@
-import type { Grid } from "./Grid";
+import type { Grid } from './Grid';
 
 type CharacterBias = {
 	biasValue: string;

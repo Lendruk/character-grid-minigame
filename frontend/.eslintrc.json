@@ -33,7 +33,6 @@
 					"error",
 					"always"
 			],
-			"@typescript-eslint/no-explicit-any": "error",
-			"@typescript-eslint/await-thenable": "error"
+			"@typescript-eslint/no-explicit-any": "error"
 	}
 }
