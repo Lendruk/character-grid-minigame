@@ -7,7 +7,7 @@
     "build": "tsc",
     "dev": "nodemon ./src/main.ts",
     "generate:drizzle": "drizzle-kit generate:sqlite --config=./drizzle.config.ts",
-    "test": "vitest"
+    "test": "vitest run"
   },
   "keywords": [],
   "author": "",

@@ -6,7 +6,8 @@
     "backend-dev": "cd backend && npm run dev",
     "frontend-dev": "cd frontend && npm run dev",
     "dev": "concurrently npm:backend-dev npm:frontend-dev",
-    "build": ""
+    "test:backend": "cd backend && npm run test",
+    "test": "npm run test:backend"
   },
   "keywords": [],
   "author": "Lendruk (Tiago Gomes)",
