@@ -1,11 +1,11 @@
 import { FastifyReply, FastifyRequest, RouteOptions } from 'fastify';
 import { GameQueryParams } from './types/GameQueryParams';
-import { gameSession } from '../../lib/GameSession';
+import { gameSessionController } from '../../lib/GameSessionController';
 
 const startGame = (request: FastifyRequest, reply: FastifyReply) => {
 	const query = request.query as GameQueryParams;
-	gameSession.startSession(query.bias);
-	reply.send(gameSession.getCurrentSession());
+	gameSessionController.startSession(query.bias);
+	reply.send(gameSessionController.getCurrentSession());
 };
 
 export default {

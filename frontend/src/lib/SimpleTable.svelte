@@ -15,16 +15,18 @@
   $: orderedRows = (() => {
     let computedRows: Row[] = [];
 
-    for(const row of rows) {
-      let obj: Row = {};
-      for(const col of cols) {
-        if(Object.keys(row).includes(col.key)) {
-          obj[col.key] = row[col.key];
+    if (rows) {
+      for(const row of rows) {
+        let obj: Row = {};
+        for(const col of cols) {
+          if(Object.keys(row).includes(col.key)) {
+            obj[col.key] = row[col.key];
+          }
         }
+        computedRows.push(obj);
       }
-      computedRows.push(obj);
     }
-
+    
     return computedRows;
   })() 
 </script>

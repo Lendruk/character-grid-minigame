@@ -2,7 +2,7 @@ import Fastify from 'fastify';
 import wb from '@fastify/websocket';
 import cors from '@fastify/cors';
 import routes from './routes';
-import { gameSession } from './lib/GameSession';
+import { gameSessionController } from './lib/GameSessionController';
 
 const app = Fastify({
 	logger: true
@@ -20,10 +20,10 @@ for(const route of routes) {
 app.register(async (fastify) => {
 	fastify.websocketServer.on('connection', (client) => {
 		console.log('connection open');
-		gameSession.connections.add(client);
+		gameSessionController.connections.add(client);
 		client.on('close', () => {
 			console.log('connection closed');
-			gameSession.connections.delete(client);
+			gameSessionController.connections.delete(client);
 		});
 	});
 });

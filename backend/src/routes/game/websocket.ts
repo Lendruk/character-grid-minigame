@@ -1,10 +1,10 @@
 import { FastifyReply, RouteOptions } from 'fastify';
-import { gameSession } from '../../lib/GameSession';
 import { SocketStream } from '@fastify/websocket';
+import { gameSessionController } from '../../lib/GameSessionController';
 
 const websocket = (connection: SocketStream) => {
 	try {
-		const currenSession = gameSession.getCurrentSession();
+		const currenSession = gameSessionController.getCurrentSession();
 		connection.socket.send(JSON.stringify({
 			event: 'SESSION',
 			data: currenSession,

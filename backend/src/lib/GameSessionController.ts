@@ -2,7 +2,12 @@ import WebSocket from 'ws';
 import { Game } from './Game';
 import { Vector2 } from './Vector2';
 
-class GameSession {
+export type GameSession = {
+	game: Game;
+	systemTime: number;
+}
+
+class GameSessionController {
 	private static readonly GAME_REFRESH_RATE = 2000;
 	private static readonly GAME_GRID_SIZE: Vector2 = { x: 10, y: 10 };
 	private currentGame?: Game;
@@ -11,17 +16,17 @@ class GameSession {
 	public connections: Set<WebSocket> = new Set();
 
 	public startSession(bias?: string): void {
-		const game: Game = new Game(GameSession.GAME_GRID_SIZE);
+		const game: Game = new Game(GameSessionController.GAME_GRID_SIZE);
 		this.currentGame = game;
 		this.refresh(bias);
 
 		this.intervalId = setInterval(() => {
 			console.log('game update');
 			this.refresh();
-		}, GameSession.GAME_REFRESH_RATE);
+		}, GameSessionController.GAME_REFRESH_RATE);
 	}
 
-	public getCurrentSession(): {game: Game, systemTime: number } {
+	public getCurrentSession(): GameSession {
 		if(!this.currentGame) {
 			throw new Error('No game in progress');
 		}
@@ -70,4 +75,4 @@ class GameSession {
 	}
 }
 
-export const gameSession = new GameSession();
+export const gameSessionController = new GameSessionController();

@@ -11,5 +11,8 @@
   },
   "keywords": [],
   "author": "Lendruk (Tiago Gomes)",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
 }

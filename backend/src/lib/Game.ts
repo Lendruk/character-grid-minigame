@@ -29,6 +29,10 @@ export class Game {
 		return this.id;
 	}
 
+	public getGrid(): GameGrid {
+		return this.grid;
+	}
+
 	/**
 	 * Refreshes the game by recalculating the game grid
 	 * @param systemSeconds the current system seconds

@@ -1,9 +1,9 @@
 import { FastifyReply, FastifyRequest, RouteOptions } from 'fastify';
-import { gameSession } from '../../lib/GameSession';
+import { gameSessionController } from '../../lib/GameSessionController';
 
 const stopGame = (request: FastifyRequest, reply: FastifyReply) => {
-	if (gameSession.hasGame()) {
-		gameSession.stopSession();
+	if (gameSessionController.hasGame()) {
+		gameSessionController.stopSession();
 		reply.send('Session stopped');
 	} else {
 		reply.send('No session in progress');
