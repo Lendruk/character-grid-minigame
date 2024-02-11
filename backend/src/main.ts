@@ -3,6 +3,7 @@ import wb from '@fastify/websocket';
 import cors from '@fastify/cors';
 import routes from './routes';
 import { gameSessionController } from './lib/GameSessionController';
+import { UserSessions } from './lib/models/UserSessions';
 
 const app = Fastify({
 	logger: true
@@ -31,3 +32,6 @@ app.register(async (fastify) => {
 app.listen({ port: 8080, host: '0.0.0.0' }, (err) => {
 	if (err) throw err;
 });
+
+// Cleaning all ongoing sessions on startup to ensure no leftovers
+UserSessions.deleteAllSessions();

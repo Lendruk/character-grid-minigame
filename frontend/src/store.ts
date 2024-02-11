@@ -2,11 +2,13 @@ import { writable } from 'svelte/store';
 import type { Game } from './types/Game';
 import { buildGameWsUrl } from './endpoints';
 import { ConnectionStatus } from './types/ConnectionStatus';
+import type { UserSession } from './types/UserSession';
 
 export const gameStore = writable<Game | undefined>();
 export const biasStore = writable<string>('');
 export const systemTimeStore = writable<number>(0);
 export const backendConnectionStatusStore = writable<ConnectionStatus>(ConnectionStatus.CONNECTING);
+export const userSessionStore = writable<UserSession | undefined>(); 
 const socket = new WebSocket(buildGameWsUrl());
 
 type GameSessionEventData = {

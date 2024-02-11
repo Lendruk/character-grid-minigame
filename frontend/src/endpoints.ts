@@ -5,3 +5,6 @@ export const buildPaymentsUrl = () => `${BACKEND_BASE_URL}/payments`;
 export const buildGamesUrl = () => `${BACKEND_BASE_URL}/game`;
 export const buildSetBiasUrl = (bias: string) => `${BACKEND_BASE_URL}/game/bias/${bias}`;
 export const buildGameWsUrl = () => `${BACKEND_BASE_WS_URL}/game`;
+export const buildRegisterUrl = () => `${BACKEND_BASE_URL}/users`;
+export const buildLoginUrl = () => `${BACKEND_BASE_URL}/login`;
+export const buildLogoutUrl = () => `${BACKEND_BASE_URL}/logout`;

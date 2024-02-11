@@ -24,5 +24,18 @@ export const storedGameGrids = sqliteTable('gameGrids', {
 	sizeY: integer('sizeY').notNull()
 });
 
+export const users = sqliteTable('users', {
+	id:  text('id', { length: 36 }).primaryKey().$defaultFn(() => randomUUID()),
+	name: text('name').unique().notNull(),
+	password: text('password').notNull(),
+});
+
+export const userSessions = sqliteTable('userSessions', {
+	userId: text('id', { length: 36 }).primaryKey(),
+	token: text('token').notNull(),
+});
+
+export type User = InferSelectModel<typeof users>;
+export type UserSession = InferSelectModel<typeof userSessions>;
 export type StoredGameGrid = InferSelectModel<typeof storedGameGrids>;
 export type Payment = InferSelectModel<typeof payments> & { grid: StoredGameGrid };

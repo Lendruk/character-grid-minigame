@@ -1,6 +1,7 @@
 import { FastifyReply, FastifyRequest, RouteOptions } from 'fastify';
 import { z } from 'zod';
 import { gameSessionController } from '../../lib/GameSessionController';
+import { checkAuth } from '../../lib/hooks/checkAuth';
 
 type SetBiasParams = {
   value: string;
@@ -18,5 +19,6 @@ const putBias = (request: FastifyRequest, reply: FastifyReply) => {
 export default {
 	method: 'PUT',
 	url: '/game/bias/:value',
+	preValidation: checkAuth,
 	handler: putBias,
 } satisfies RouteOptions;

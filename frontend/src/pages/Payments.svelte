@@ -1,37 +1,49 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import LiveCodeDisplay from "../lib/LiveCodeDisplay.svelte";
-  import type { Payment, PaymentWithCalculatedGridSize } from "../types/Payment";
+  import type {
+    Payment,
+    PaymentWithCalculatedGridSize,
+  } from "../types/Payment";
   import SimpleTable from "../lib/SimpleTable.svelte";
   import { buildPaymentsUrl } from "../endpoints";
   import { gameStore } from "../store";
+  import { HttpService } from "../services/HttpService";
 
   let payments: PaymentWithCalculatedGridSize[] = [];
   let paymentName: string = "";
   let paymentAmount: number | undefined;
   onMount(async () => {
-    const response = await fetch(buildPaymentsUrl());
-    const { payments: fetchedPayments } = await response.json() as { payments: Payment[] };
-    payments = fetchedPayments.map(payment => ({ ...payment, gridSize: payment.grid.sizeX * payment.grid.sizeY }));
+    const response = await HttpService.get<{ payments: Payment[] }>(
+      buildPaymentsUrl(),
+    );
+    const { payments: fetchedPayments } = response;
+    payments = fetchedPayments.map((payment) => ({
+      ...payment,
+      gridSize: payment.grid.sizeX * payment.grid.sizeY,
+    }));
   });
 
   async function createPayment() {
-    if(!paymentName || !paymentAmount) {
+    if (!paymentName || !paymentAmount) {
       return;
     }
 
-    const response = await fetch(buildPaymentsUrl(), {
-      method: "POST",
-      body: JSON.stringify({
+    const response = await HttpService.post<{ payment: Payment }>(
+      buildPaymentsUrl(),
+      {
         name: paymentName,
         amount: paymentAmount,
         code: $gameStore?.code,
-      }),
+      },
+    );
+
+    const { payment } = response;
+    payments.push({
+      ...payment,
+      gridSize: payment.grid.sizeX * payment.grid.sizeY,
     });
 
-    const { payment } = await response.json() as { payment: Payment };
-    payments.push({...payment, gridSize: payment.grid.sizeX * payment.grid.sizeY });
-    
     // This is a svelte quirk for triggering hydration
     // This is fixed in svelte 5 (not out yet)
     payments = payments;
@@ -46,18 +58,39 @@
   <div class="flex gap-4 mb-10 mt-10">
     <div>
       <p>Name</p>
-      <input disabled={!$gameStore} class={`${!$gameStore ? 'cursor-not-allowed' : 'cursor-auto'}`} type="text" placeholder="name" bind:value={paymentName} />
+      <input
+        disabled={!$gameStore}
+        class={`${!$gameStore ? "cursor-not-allowed" : "cursor-auto"}`}
+        type="text"
+        placeholder="name"
+        bind:value={paymentName}
+      />
     </div>
     <div>
       <p>Amount</p>
-      <input disabled={!$gameStore} class={`${!$gameStore ? 'cursor-not-allowed' : 'cursor-auto'}`} type="number" placeholder="amount" bind:value={paymentAmount} />
+      <input
+        disabled={!$gameStore}
+        class={`${!$gameStore ? "cursor-not-allowed" : "cursor-auto"}`}
+        type="number"
+        placeholder="amount"
+        bind:value={paymentAmount}
+      />
     </div>
-    <button disabled={!$gameStore} class={`${!$gameStore ? 'cursor-not-allowed' : 'cursor-auto'}`} on:click={createPayment}>+ Add</button>
+    <button
+      disabled={!$gameStore}
+      class={`${!$gameStore ? "cursor-not-allowed" : "cursor-auto"}`}
+      on:click={createPayment}>+ Add</button
+    >
   </div>
   <div>
     <SimpleTable
       rows={payments}
-      cols={[{ display: "Name", key: "name", spacing: "0.75" }, { display: "Amount", key: "amount" }, { display: "Code", key: "code" }, { display: "Grid", key: "gridSize" }]}
+      cols={[
+        { display: "Name", key: "name", spacing: "0.75" },
+        { display: "Amount", key: "amount" },
+        { display: "Code", key: "code" },
+        { display: "Grid", key: "gridSize" },
+      ]}
     />
   </div>
 </div>

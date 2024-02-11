@@ -3,20 +3,40 @@
   import Game from './pages/Game.svelte';
   import NotFound from './pages/NotFound.svelte';
   import Payments from './pages/Payments.svelte';
-    import { backendConnectionStatusStore } from './store';
+    import { backendConnectionStatusStore, userSessionStore } from './store';
     import { ConnectionStatus } from './types/ConnectionStatus';
+    import AuthModal from './lib/AuthModal.svelte';
+    import { HttpService } from './services/HttpService';
+    import { buildLogoutUrl } from './endpoints';
 
   const routes = {
     '/': Game,
     '/payments': Payments,
     '*': NotFound
   }
+
+  async function logout() {
+    if($userSessionStore) {
+      await HttpService.post(buildLogoutUrl(), {});
+      userSessionStore.set(undefined)
+    }
+  }
+  let isAuthOpen = false;
 </script>
 
 <main class="flex flex-1 flex-col">
-  <div class="flex pl-2 pt-4 pb-4 bg-slate-950">
-    <a class="pr-2 pl-2" use:link={{ href: "/"}} >Game</a>
-    <a use:link={{ href: "/payments"}}>Payments</a>
+  <div class="flex pl-2 pt-4 pb-4 bg-slate-950 justify-between">
+    <div>
+      <a class="pr-2 pl-2" use:link={{ href: "/"}} >Game</a>
+      <a use:link={{ href: "/payments"}}>Payments</a>
+    </div>
+    <div class="mr-4">
+      {#if !$userSessionStore}
+      <button on:click={() => isAuthOpen = !isAuthOpen}>Sign in</button>
+      {:else}
+      <button on:click={logout}>Sign out</button>
+      {/if}
+    </div>
   </div>
   <Router {routes} />
   {#if $backendConnectionStatusStore === ConnectionStatus.DISCONNECTED} 
@@ -26,4 +46,5 @@
       </div>
     </div>
   {/if}
+  <AuthModal isOpen={isAuthOpen} />
 </main>

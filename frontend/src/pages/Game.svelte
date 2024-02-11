@@ -4,39 +4,34 @@
   import LiveCodeDisplay from "../lib/LiveCodeDisplay.svelte";
   import { biasStore, gameStore, systemTimeStore } from "../store";
   import { buildGamesUrl, buildSetBiasUrl } from "../endpoints";
+  import { HttpService } from "../services/HttpService";
+  import type { Game as GameDef } from "../types/Game";
 
   async function startGame() {
     await createGame();
   }
 
   async function stopGame() {
+    await HttpService.delete(`${buildGamesUrl()}`);
     gameStore.set(undefined);
     systemTimeStore.set(0);
-    biasStore.set('');
-    await fetch(`${buildGamesUrl()}`, { method: "DELETE" });
+    biasStore.set("");
   }
 
   async function createGame() {
-    const response = await fetch(`${buildGamesUrl()}?bias=${$biasStore.charAt(0)}`, {
-      method: "POST",
-    });
     const { game: fetchedGame, systemTime: fetchedSystemTime } =
-      await response.json();
-    console.log(fetchedGame);
+      await await HttpService.post<{ game: GameDef; systemTime: number }>(
+        `${buildGamesUrl()}?bias=${$biasStore.charAt(0)}`,
+        {},
+      );
     gameStore.set(fetchedGame);
     systemTimeStore.set(fetchedSystemTime);
   }
 
   async function onCharacterInputChange() {
-    const response = await fetch(buildSetBiasUrl($biasStore.charAt(0)), {
-      method: "PUT",
-    });
-    const responseBody = await response.json();
-
-    // if(!responseBody.isUpdateSuccessful) {
-    // }
+    await HttpService.put(buildSetBiasUrl($biasStore.charAt(0)), {});
+    //TODO: Give feedback on error
   }
-
 </script>
 
 <div class="flex flex-col flex-1 m-4">
@@ -47,7 +42,7 @@
         type="text"
         placeholder="Character"
         disabled={!$gameStore}
-        class={`${$gameStore ? 'cursor-auto' : 'cursor-not-allowed'}`}
+        class={`${$gameStore ? "cursor-auto" : "cursor-not-allowed"}`}
         on:change={onCharacterInputChange}
         bind:value={$biasStore}
       />
