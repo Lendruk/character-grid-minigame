@@ -3,6 +3,8 @@
   import Game from './pages/Game.svelte';
   import NotFound from './pages/NotFound.svelte';
   import Payments from './pages/Payments.svelte';
+    import { backendConnectionStatusStore } from './store';
+    import { ConnectionStatus } from './types/ConnectionStatus';
 
   const routes = {
     '/': Game,
@@ -17,4 +19,11 @@
     <a use:link={{ href: "/payments"}}>Payments</a>
   </div>
   <Router {routes} />
+  {#if $backendConnectionStatusStore === ConnectionStatus.DISCONNECTED} 
+    <div class="flex justify-center">
+      <div class="bg-red-900 text-xl p-4 rounded-md m-4">
+        Connection to the system has been lost, please try refreshing your page
+      </div>
+    </div>
+  {/if}
 </main>
