@@ -33,6 +33,10 @@ export class Game {
 		return this.grid;
 	}
 
+	public getCode(): string {
+		return this.code;
+	}
+
 	/**
 	 * Refreshes the game by recalculating the game grid
 	 * @param systemSeconds the current system seconds
@@ -57,7 +61,6 @@ export class Game {
 		const second_cell = this.grid.getCellAt({ x: mappedSystemSeconds[1], y: mappedSystemSeconds[0] });
 		let first_cell_occurrences = this.grid.countOccurrencesOfCell(first_cell);
 		let second_cell_occurrences = this.grid.countOccurrencesOfCell(second_cell);
-
 		if (first_cell_occurrences > 9) {
 			first_cell_occurrences = this.lowerValue(first_cell_occurrences);
 		}
@@ -93,14 +96,21 @@ export class Game {
 	private mapSystemSeconds(systemSeconds: number): [number, number] {
 		const stringifiedSeconds = systemSeconds.toString();
 		const first_digit = Number.parseInt(stringifiedSeconds.charAt(0));
-		const second_digit = Number.parseInt(stringifiedSeconds.charAt(1) ?? stringifiedSeconds.charAt(0));
+		const second_digit = Number.parseInt(stringifiedSeconds.charAt(1) || stringifiedSeconds.charAt(0));
 		return [first_digit, second_digit];
 	}
 
+	/**
+	 * Lowers a value until it's lower or equal to 9 by the lowest integer possible recursively
+	 * @param value value to lower
+	 * @param denominator current denominator
+	 * @returns the lowered value
+	 */
 	private lowerValue(value: number, denominator: number = 2): number {
-		if (value > 9) {
-			return this.lowerValue(value / denominator, denominator + 1);
+		const dividedValue =value / denominator;
+		if (dividedValue > 9) {
+			return this.lowerValue(value, denominator + 1);
 		}
-		return Math.round(value);
+		return Math.round(dividedValue);
 	}
 }

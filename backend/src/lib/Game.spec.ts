@@ -1,7 +1,15 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { Game } from './Game';
 import { Vector2 } from './Vector2';
+import * as crypto from 'node:crypto';
 
+vi.mock('node:crypto', async () => {
+	const mod = await vi.importActual<typeof import('node:crypto')>('node:crypto');
+	return {
+		randomInt: vi.fn().mockImplementation((min, max) => mod.randomInt(min, max)), 
+		randomUUID: vi.fn().mockImplementation(() => mod.randomUUID()),
+	};
+});
 describe('Game', () => {
 	const MOCK_GRID_SIZE: Vector2 = { x: 10, y: 10 };
 	let cut: Game;
@@ -46,6 +54,20 @@ describe('Game', () => {
 
 			test('the character should be the first one set', () => {
 				expect(cut.bias).toEqual(expect.objectContaining({ biasValue: 'a' }));
+			});
+		});
+	});
+
+	describe('code calculation', () => {
+		describe('handles system second value < 10', () => {
+			beforeEach(() => {
+				vi.spyOn(crypto, 'randomInt').mockImplementation(() => 97);
+				cut = new Game(MOCK_GRID_SIZE);
+				cut.refresh(5);
+			});
+
+			test('code should be equal to 88', () => {
+				expect(cut.getCode()).toEqual('88');
 			});
 		});
 	});
