@@ -82,13 +82,14 @@ export class Game {
 
 	/**
 	 * Maps the raw system seconds returned from the date `getSeconds` method into a tuple
+	 * If the system seconds is below 10, the digit will be used for both positions
 	 * @param systemSeconds the current system seconds
 	 * @returns the mapped tuple contained both digits
 	 */
 	private mapSystemSeconds(systemSeconds: number): [number, number] {
 		const stringifiedSeconds = systemSeconds.toString();
 		const first_digit = Number.parseInt(stringifiedSeconds.charAt(0));
-		const second_digit = Number.parseInt(stringifiedSeconds.charAt(1));
+		const second_digit = Number.parseInt(stringifiedSeconds.charAt(1) ?? stringifiedSeconds.charAt(0));
 		return [first_digit, second_digit];
 	}
 
