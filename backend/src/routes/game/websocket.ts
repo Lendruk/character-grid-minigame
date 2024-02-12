@@ -1,16 +1,17 @@
 import { FastifyReply, RouteOptions } from 'fastify';
 import { SocketStream } from '@fastify/websocket';
-import { gameSessionController } from '../../lib/GameSessionController';
+import { GameSession, gameSessionController } from '../../lib/GameSessionController';
 
 const websocket = (connection: SocketStream) => {
+	let currentSession: GameSession;
 	try {
-		const currenSession = gameSessionController.getCurrentSession();
+		currentSession = gameSessionController.getCurrentSession();
 		connection.socket.send(JSON.stringify({
 			event: 'SESSION',
-			data: currenSession,
+			data: currentSession,
 		}));
-	} catch(error) {
-		console.log(error);
+	} catch {
+		// No session in progress
 	}
 };
 

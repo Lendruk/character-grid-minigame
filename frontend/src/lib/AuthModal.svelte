@@ -16,6 +16,7 @@
   let showSignup = false;
   let userName = "";
   let password = "";
+  let loginError = false;
 
   async function login() {
     try {
@@ -24,10 +25,10 @@
         password,
       });
       userSessionStore.set({ name: userName, token: response.token });
+      cleanModal();
     } catch (error) {
-      //TODO: Give feedback on error
+      loginError = true;
     }
-    cleanModal();
   }
 
   async function registerUser() {
@@ -48,6 +49,7 @@
     password = "";
     isOpen = false;
     showSignup = false;
+    loginError = false;
   }
 </script>
 
@@ -68,6 +70,9 @@
       <p>Password</p>
       <input type="password" placeholder="password" bind:value={password} />
     </div>
+    {#if loginError}
+      <span class={"text-red-700"}>Wrong password or account does not exist</span>
+    {/if}
     <div class="flex justify-end mt-4">
       <button
         disabled={!userName || !password}

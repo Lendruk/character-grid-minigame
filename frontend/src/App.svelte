@@ -22,6 +22,7 @@
       userSessionStore.set(undefined)
     }
   }
+
   let isAuthOpen = false;
 </script>
 
@@ -33,7 +34,7 @@
     </div>
     <div class="mr-4">
       {#if !$userSessionStore}
-      <button on:click={() => isAuthOpen = !isAuthOpen}>Sign in</button>
+      <button on:click={() => isAuthOpen = true}>Sign in</button>
       {:else}
       <button on:click={logout}>Sign out</button>
       {/if}
@@ -47,6 +48,6 @@
       </div>
     </div>
   {/if}
-  <AuthModal isOpen={isAuthOpen} />
+  <AuthModal bind:isOpen={isAuthOpen} />
   <SvelteToast />
 </main>

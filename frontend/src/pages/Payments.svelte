@@ -9,6 +9,7 @@
   import { buildPaymentsUrl } from "../endpoints";
   import { gameStore, paymentStore } from "../store";
   import { HttpService } from "../services/HttpService";
+  import RequiresAuthButton from "../lib/RequiresAuthButton.svelte";
 
   let payments: PaymentWithCalculatedGridSize[] = [];
   let paymentName: string = "";
@@ -80,10 +81,10 @@
         bind:value={paymentAmount}
       />
     </div>
-    <button
+    <RequiresAuthButton
       disabled={!$gameStore}
       class={`${!$gameStore ? "cursor-not-allowed" : "cursor-auto"}`}
-      on:click={createPayment}>+ Add</button
+      onClick={createPayment}>+ Add</RequiresAuthButton
     >
   </div>
   <div>

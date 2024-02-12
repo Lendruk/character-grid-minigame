@@ -6,6 +6,7 @@
   import { buildGamesUrl, buildSetBiasUrl } from "../endpoints";
   import { HttpService } from "../services/HttpService";
   import type { Game as GameDef } from "../types/Game";
+  import RequiresAuthButton from "../lib/RequiresAuthButton.svelte";
 
   async function startGame() {
     await createGame();
@@ -51,13 +52,13 @@
       <Clock time={$systemTimeStore} />
     </div>
     <div class="min-w-40 flex justify-end">
-      <button on:click={() => ($gameStore ? stopGame() : startGame())}>
+      <RequiresAuthButton onClick={() => ($gameStore ? stopGame() : startGame())}>
         {#if $gameStore}
           Stop
         {:else}
           Generate 2D Grid
         {/if}
-      </button>
+      </RequiresAuthButton>
     </div>
   </div>
   <div class="flex items-center justify-center flex-1">
