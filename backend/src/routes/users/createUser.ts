@@ -4,8 +4,8 @@ import { Users } from '../../lib/models/Users';
 import { UserSessions } from '../../lib/models/UserSessions';
 
 type CreateUserBody = {
-  name: string;
-  password: string;
+	name: string;
+	password: string;
 }
 
 const createUser = async (request: FastifyRequest, reply: FastifyReply) => {
@@ -15,7 +15,7 @@ const createUser = async (request: FastifyRequest, reply: FastifyReply) => {
 			name: z.string(),
 			password: z.string()
 		}).parse(body);
-	} catch(error) {
+	} catch (error) {
 		reply.status(400).send();
 	}
 

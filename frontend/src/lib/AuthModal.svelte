@@ -71,7 +71,9 @@
       <input type="password" placeholder="password" bind:value={password} />
     </div>
     {#if loginError}
-      <span class={"text-red-700"}>Wrong password or account does not exist</span>
+      <span class={"text-red-700"}
+        >Wrong password or account does not exist</span
+      >
     {/if}
     <div class="flex justify-end mt-4">
       <button

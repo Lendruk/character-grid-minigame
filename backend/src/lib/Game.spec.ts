@@ -6,7 +6,7 @@ import * as crypto from 'node:crypto';
 vi.mock('node:crypto', async () => {
 	const mod = await vi.importActual<typeof import('node:crypto')>('node:crypto');
 	return {
-		randomInt: vi.fn().mockImplementation((min, max) => mod.randomInt(min, max)), 
+		randomInt: vi.fn().mockImplementation((min, max) => mod.randomInt(min, max)),
 		randomUUID: vi.fn().mockImplementation(() => mod.randomUUID()),
 	};
 });

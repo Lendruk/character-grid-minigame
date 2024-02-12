@@ -5,8 +5,8 @@ import { Users } from '../../lib/models/Users';
 import { UserSessions } from '../../lib/models/UserSessions';
 
 type LoginBody = {
-  name: string;
-  password: string;
+	name: string;
+	password: string;
 }
 
 const login = async (request: FastifyRequest, reply: FastifyReply) => {
@@ -16,12 +16,12 @@ const login = async (request: FastifyRequest, reply: FastifyReply) => {
 			name: z.string(),
 			password: z.string()
 		}).parse(body);
-	} catch(error) {
+	} catch (error) {
 		reply.status(400).send('Bad request');
 		return;
 	}
 
-	const user = await Users.getByName(body.name);  
+	const user = await Users.getByName(body.name);
 	if (await bcrypt.compare(body.password, user.password)) {
 		const newSession = await UserSessions.new(user.id, user.password);
 		reply.status(200).send({ token: newSession.token });

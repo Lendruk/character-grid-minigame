@@ -9,5 +9,5 @@ const getPayments = async (_: FastifyRequest, reply: FastifyReply) => {
 export default {
 	method: 'GET',
 	url: '/payments',
-	handler:getPayments,
+	handler: getPayments,
 } as RouteOptions;

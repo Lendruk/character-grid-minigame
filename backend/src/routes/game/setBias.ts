@@ -4,7 +4,7 @@ import { gameSessionController } from '../../lib/GameSessionController';
 import { checkAuth } from '../../lib/hooks/checkAuth';
 
 type SetBiasParams = {
-  value: string;
+	value: string;
 }
 
 const putBias = (request: FastifyRequest, reply: FastifyReply) => {
@@ -13,7 +13,7 @@ const putBias = (request: FastifyRequest, reply: FastifyReply) => {
 
 	const isUpdateSuccessful = gameSessionController.setBias(biasValue);
 
-	reply.send({ isUpdateSuccessful});
+	reply.send({ isUpdateSuccessful });
 };
 
 export default {

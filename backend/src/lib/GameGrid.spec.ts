@@ -6,13 +6,13 @@ import * as crypto from 'node:crypto';
 vi.mock('node:crypto', async () => {
 	const mod = await vi.importActual<typeof import('node:crypto')>('node:crypto');
 	return {
-		randomInt: vi.fn().mockImplementation((min, max) => mod.randomInt(min, max)), 
+		randomInt: vi.fn().mockImplementation((min, max) => mod.randomInt(min, max)),
 	};
 });
 describe('GameGrid', () => {
 	const GRID_SIZE: Vector2 = { x: 10, y: 10 };
 	let cut: GameGrid;
-	
+
 	beforeEach(() => {
 		vi.clearAllMocks();
 	});

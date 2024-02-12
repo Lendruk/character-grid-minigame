@@ -12,7 +12,7 @@ const app = Fastify({
 app.register(wb);
 app.register(cors);
 
-for(const route of routes) {
+for (const route of routes) {
 	app.register(async function (fastify) {
 		fastify.route(route);
 	});

@@ -59,7 +59,7 @@
 </script>
 
 <div class="flex flex-col flex-1 m-4">
-  <LiveCodeDisplay code={$gameStore?.code ?? ''} isLive={!!$gameStore} />
+  <LiveCodeDisplay code={$gameStore?.code ?? ""} isLive={!!$gameStore} />
   <div class="flex gap-4 mb-10 mt-10">
     <div>
       <p>Name</p>

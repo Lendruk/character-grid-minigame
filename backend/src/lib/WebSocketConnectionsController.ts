@@ -1,8 +1,8 @@
 import WebSocket from 'ws';
 
 type WebSocketEvent = {
-  event: string;
-  data?: Record<string, unknown>;
+	event: string;
+	data?: Record<string, unknown>;
 }
 
 class WebSocketConnectionsController {

@@ -9,12 +9,11 @@ export const checkAuth = async (request: FastifyRequest, reply: FastifyReply) =>
 		try {
 			const token = authorization.split(' ')[1];
 
-			if(!UserSessions.verifySession(token)) {
+			if (!UserSessions.verifySession(token)) {
 				return reply.status(401).send();
 			}
-		} catch(error) {
+		} catch (error) {
 			return reply.status(500).send();
 		}
-    
 	}
 };

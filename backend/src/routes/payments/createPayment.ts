@@ -23,7 +23,7 @@ const createPayment = async (request: FastifyRequest, reply: FastifyReply) => {
 			amount: z.number(),
 			code: z.string()
 		}).parse(body);
-		
+
 		const storedGrid = await GameGrids.new(gameGrid.getCells(), gameGrid.size);
 		const newPayment = await Payments.new(validatedBody.amount, validatedBody.code, validatedBody.name, storedGrid.id);
 
@@ -32,7 +32,7 @@ const createPayment = async (request: FastifyRequest, reply: FastifyReply) => {
 			data: newPayment
 		});
 
-	} catch(error) {
+	} catch (error) {
 		reply.status(400).send('Cannot create a payment without a session in progress');
 	}
 };

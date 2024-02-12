@@ -52,7 +52,9 @@
       <Clock time={$systemTimeStore} />
     </div>
     <div class="min-w-40 flex justify-end">
-      <RequiresAuthButton onClick={() => ($gameStore ? stopGame() : startGame())}>
+      <RequiresAuthButton
+        onClick={() => ($gameStore ? stopGame() : startGame())}
+      >
         {#if $gameStore}
           Stop
         {:else}

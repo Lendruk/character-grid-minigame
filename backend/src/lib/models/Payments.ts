@@ -9,14 +9,14 @@ export class Payments {
 	}
 
 	public static async getById(id: string): Promise<Payment> {
-		const payment = await db.query.payments.findFirst({ where: eq(payments.id, id ), with: { grid: true } });
-		if(!payment) {
+		const payment = await db.query.payments.findFirst({ where: eq(payments.id, id), with: { grid: true } });
+		if (!payment) {
 			throw new Error(`Payment with id ${id} not found`);
 		}
 		return payment;
 	}
 
 	public static async getAll(): Promise<Payment[]> {
-		return db.query.payments.findMany({ with: { grid: true }});
+		return db.query.payments.findMany({ with: { grid: true } });
 	}
 }

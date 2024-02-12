@@ -10,8 +10,8 @@ export class HttpService {
 
 		const session = get(userSessionStore);
 
-		if(session) {
-			headers['Authorization'] =  `Bearer ${session.token}`;
+		if (session) {
+			headers['Authorization'] = `Bearer ${session.token}`;
 		}
 
 		return headers;

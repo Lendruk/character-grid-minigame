@@ -35,7 +35,7 @@ class GameSessionController {
 	}
 
 	public getCurrentSession(): GameSession {
-		if(!this.currentGame) {
+		if (!this.currentGame) {
 			throw new Error('No game in progress');
 		}
 
@@ -54,12 +54,12 @@ class GameSessionController {
 	}
 
 	public setBias(bias: string): boolean {
-		if(this.currentGame) {
+		if (this.currentGame) {
 			return this.currentGame?.updateCharacterBias(bias);
 		}
 		return false;
 	}
-	
+
 	public getGame(): Game | undefined {
 		return this.currentGame;
 	}

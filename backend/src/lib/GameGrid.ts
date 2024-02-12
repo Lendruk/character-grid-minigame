@@ -14,7 +14,7 @@ export class GameGrid {
 		this.size = size;
 		this.cells = [];
 	}
-  
+
 	public getCells(): string[] {
 		return this.cells;
 	}
@@ -43,17 +43,17 @@ export class GameGrid {
 		const biasPositions: Set<number> = new Set();
 		if (bias) {
 			const totalPositions = Math.round(this.size.x * this.size.y * GameGrid.BIAS_WEIGHT);
-			while(biasPositions.size < totalPositions) {
+			while (biasPositions.size < totalPositions) {
 				biasPositions.add(this.size.x * randomInt(0, this.size.x) + randomInt(0, this.size.y));
 			}
 		}
 
 		for (let x = 0; x < this.size.x; x++) {
-			for(let y = 0; y < this.size.y; y++) {
+			for (let y = 0; y < this.size.y; y++) {
 				const currentIndex = this.size.x * y + x;
-				if (biasPositions.has(currentIndex)) {
-					this.cells[currentIndex] = bias!;
-				} else{
+				if (bias && biasPositions.has(currentIndex)) {
+					this.cells[currentIndex] = bias;
+				} else {
 					this.cells[this.size.x * y + x] = this.generateRandomAscii(bias);
 				}
 			}
@@ -66,19 +66,19 @@ export class GameGrid {
 	 * @param unwantedChar a character to be ignore from the range
 	 * @returns the random ascii character
 	 */
-	private generateRandomAscii(unwantedChar?:string): string {
+	private generateRandomAscii(unwantedChar?: string): string {
 		// Ascii table maps nicely to a random number generator
 		let randomAscii = randomInt(97, 123);
 		if (unwantedChar) {
 			const charCode = unwantedChar.codePointAt(0);
 			if (charCode == randomAscii) {
-				while(charCode == randomAscii) {
-					randomAscii  = randomInt(97, 123);
+				while (charCode == randomAscii) {
+					randomAscii = randomInt(97, 123);
 				}
 			}
 		}
 
-		return  String.fromCharCode(randomAscii);
+		return String.fromCharCode(randomAscii);
 	}
-  
+
 }

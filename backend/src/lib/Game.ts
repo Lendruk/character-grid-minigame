@@ -43,7 +43,7 @@ export class Game {
 	 * @param bias an optional character to be used as a weighted bias
 	 */
 	public refresh(systemSeconds: number, bias?: string): void {
-		if(bias) {
+		if (bias) {
 			this.updateCharacterBias(bias);
 		}
 		this.grid.refresh(this.bias?.biasValue);
@@ -57,7 +57,7 @@ export class Game {
 	 */
 	private calculateNewCode(systemSeconds: number): string {
 		const mappedSystemSeconds = this.mapSystemSeconds(systemSeconds);
-		const first_cell = this.grid.getCellAt({ x: mappedSystemSeconds[0] , y: mappedSystemSeconds[1] });
+		const first_cell = this.grid.getCellAt({ x: mappedSystemSeconds[0], y: mappedSystemSeconds[1] });
 		const second_cell = this.grid.getCellAt({ x: mappedSystemSeconds[1], y: mappedSystemSeconds[0] });
 		let first_cell_occurrences = this.grid.countOccurrencesOfCell(first_cell);
 		let second_cell_occurrences = this.grid.countOccurrencesOfCell(second_cell);
@@ -68,7 +68,7 @@ export class Game {
 		if (second_cell_occurrences > 9) {
 			second_cell_occurrences = this.lowerValue(second_cell_occurrences);
 		}
-    
+
 		return `${first_cell_occurrences}${second_cell_occurrences}`;
 	}
 
@@ -77,7 +77,7 @@ export class Game {
 	 * @param bias a new character bias
 	 */
 	public updateCharacterBias(bias: string): boolean {
-		if(!this.bias || (this.bias && Date.now() - this.bias.updatedAt > Game.CHARACTER_BIAS_REFRESH_TIME)) {
+		if (!this.bias || (this.bias && Date.now() - this.bias.updatedAt > Game.CHARACTER_BIAS_REFRESH_TIME)) {
 			this.bias = {
 				biasValue: bias.charAt(0),
 				updatedAt: Date.now(),
@@ -107,7 +107,7 @@ export class Game {
 	 * @returns the lowered value
 	 */
 	private lowerValue(value: number, denominator: number = 2): number {
-		const dividedValue =value / denominator;
+		const dividedValue = value / denominator;
 		if (dividedValue > 9) {
 			return this.lowerValue(value, denominator + 1);
 		}
