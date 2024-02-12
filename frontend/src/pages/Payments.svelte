@@ -7,7 +7,7 @@
   } from "../types/Payment";
   import SimpleTable from "../lib/SimpleTable.svelte";
   import { buildPaymentsUrl } from "../endpoints";
-  import { gameStore } from "../store";
+  import { gameStore, paymentStore } from "../store";
   import { HttpService } from "../services/HttpService";
 
   let payments: PaymentWithCalculatedGridSize[] = [];
@@ -18,10 +18,7 @@
       buildPaymentsUrl(),
     );
     const { payments: fetchedPayments } = response;
-    payments = fetchedPayments.map((payment) => ({
-      ...payment,
-      gridSize: payment.grid.sizeX * payment.grid.sizeY,
-    }));
+    paymentStore.set(fetchedPayments);
   });
 
   async function createPayment() {
@@ -51,10 +48,17 @@
     paymentName = "";
     paymentAmount = undefined;
   }
+
+  $: {
+    payments = $paymentStore.map((payment) => ({
+      ...payment,
+      gridSize: payment.grid.sizeX * payment.grid.sizeY,
+    }));
+  }
 </script>
 
 <div class="flex flex-col flex-1 m-4">
-  <LiveCodeDisplay code={$gameStore?.code} isLive={!!$gameStore} />
+  <LiveCodeDisplay code={$gameStore?.code ?? ''} isLive={!!$gameStore} />
   <div class="flex gap-4 mb-10 mt-10">
     <div>
       <p>Name</p>

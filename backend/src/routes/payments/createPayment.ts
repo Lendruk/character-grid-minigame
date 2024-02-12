@@ -4,6 +4,13 @@ import { GameSession, gameSessionController } from '../../lib/GameSessionControl
 import { GameGrids } from '../../lib/models/GameGrids';
 import { Payments } from '../../lib/models/Payments';
 import { checkAuth } from '../../lib/hooks/checkAuth';
+import { Payment } from '../../db/schema';
+import { webSocketConnectionsController } from '../../lib/WebSocketConnectionsController';
+
+type NewPaymentWSEvent = {
+	event: 'NEW_PAYMENT',
+	data: Payment
+}
 
 const createPayment = async (request: FastifyRequest, reply: FastifyReply) => {
 	const body = request.body;
@@ -19,7 +26,12 @@ const createPayment = async (request: FastifyRequest, reply: FastifyReply) => {
 		
 		const storedGrid = await GameGrids.new(gameGrid.getCells(), gameGrid.size);
 		const newPayment = await Payments.new(validatedBody.amount, validatedBody.code, validatedBody.name, storedGrid.id);
-		reply.send({ payment: newPayment });
+
+		webSocketConnectionsController.broadcastEvent<NewPaymentWSEvent>({
+			event: 'NEW_PAYMENT',
+			data: newPayment
+		});
+
 	} catch(error) {
 		reply.status(400).send('Cannot create a payment without a session in progress');
 	}

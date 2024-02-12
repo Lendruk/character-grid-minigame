@@ -1,10 +1,19 @@
-import WebSocket from 'ws';
 import { Game } from './Game';
 import { Vector2 } from './Vector2';
+import { webSocketConnectionsController } from './WebSocketConnectionsController';
 
 export type GameSession = {
 	game: Game;
 	systemTime: number;
+}
+
+type SessionUpdateWSEvent = {
+	event: 'SESSION'
+	data: GameSession
+}
+
+type SessionEndWSEvent = {
+	event: 'SESSION_END'
 }
 
 class GameSessionController {
@@ -13,7 +22,6 @@ class GameSessionController {
 	private currentGame?: Game;
 	private systemTime: number = 0;
 	private intervalId!: NodeJS.Timeout;
-	public connections: Set<WebSocket> = new Set();
 
 	public startSession(bias?: string): void {
 		const game: Game = new Game(GameSessionController.GAME_GRID_SIZE);
@@ -37,9 +45,8 @@ class GameSessionController {
 	public stopSession(): void {
 		clearInterval(this.intervalId);
 		this.currentGame = undefined;
-		this.connections.forEach((connection) => {
-			connection.send(JSON.stringify({ event: 'END' }));
-		});
+
+		webSocketConnectionsController.broadcastEvent<SessionEndWSEvent>({ event: 'SESSION_END' });
 	}
 
 	public setGame(game: Game): void {
@@ -69,8 +76,9 @@ class GameSessionController {
 	}
 
 	private broadcastUpdate(): void {
-		this.connections.forEach((connection) => {
-			connection.send(JSON.stringify({ event: 'SESSION', data: this.getCurrentSession() }));
+		webSocketConnectionsController.broadcastEvent<SessionUpdateWSEvent>({
+			event: 'SESSION',
+			data: this.getCurrentSession()
 		});
 	}
 }

@@ -3,11 +3,12 @@
   import Game from './pages/Game.svelte';
   import NotFound from './pages/NotFound.svelte';
   import Payments from './pages/Payments.svelte';
-    import { backendConnectionStatusStore, userSessionStore } from './store';
-    import { ConnectionStatus } from './types/ConnectionStatus';
-    import AuthModal from './lib/AuthModal.svelte';
-    import { HttpService } from './services/HttpService';
-    import { buildLogoutUrl } from './endpoints';
+  import { SvelteToast } from '@zerodevx/svelte-toast'
+  import { backendConnectionStatusStore, userSessionStore } from './store';
+  import { ConnectionStatus } from './types/ConnectionStatus';
+  import AuthModal from './lib/AuthModal.svelte';
+  import { HttpService } from './services/HttpService';
+  import { buildLogoutUrl } from './endpoints';
 
   const routes = {
     '/': Game,
@@ -47,4 +48,5 @@
     </div>
   {/if}
   <AuthModal isOpen={isAuthOpen} />
+  <SvelteToast />
 </main>
