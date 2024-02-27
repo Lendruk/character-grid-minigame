@@ -6,9 +6,22 @@
     "backend-dev": "cd backend && npm run dev",
     "frontend-dev": "cd frontend && npm run dev",
     "dev": "concurrently npm:backend-dev npm:frontend-dev",
-    "build": ""
+    "prepare:backend": "cd backend && npm i",
+    "prepare:frontend": "cd frontend && npm i",
+    "prepare:dev": "npm run prepare:backend && npm run prepare:frontend",
+    "build:backend": "cd backend && npm run build",
+    "build:frontend": "cd frontend && npm run build",
+    "build": "npm run build:backend && npm run build:frontend",
+    "lint:backend": "cd backend && npm run lint",
+    "lint:frontend": "cd frontend && npm run lint",
+    "test:backend": "cd backend && npm run test",
+    "test": "npm run test:backend",
+    "lint": "npm run lint:backend && npm run lint:frontend"
   },
   "keywords": [],
   "author": "Lendruk (Tiago Gomes)",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
 }

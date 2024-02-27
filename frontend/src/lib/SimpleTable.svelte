@@ -3,11 +3,11 @@
     key: string;
     display: string;
     spacing?: string;
-  }
+  };
 
   type Row = {
     [index: string]: unknown;
-  }
+  };
   export let rows: Row[] = [];
   export let cols: Col[] = [];
   let orderedRows: Row[] = [];
@@ -15,18 +15,20 @@
   $: orderedRows = (() => {
     let computedRows: Row[] = [];
 
-    for(const row of rows) {
-      let obj: Row = {};
-      for(const col of cols) {
-        if(Object.keys(row).includes(col.key)) {
-          obj[col.key] = row[col.key];
+    if (rows) {
+      for (const row of rows) {
+        let obj: Row = {};
+        for (const col of cols) {
+          if (Object.keys(row).includes(col.key)) {
+            obj[col.key] = row[col.key];
+          }
         }
+        computedRows.push(obj);
       }
-      computedRows.push(obj);
     }
 
     return computedRows;
-  })() 
+  })();
 </script>
 
 <table class="flex flex-col flex-1">

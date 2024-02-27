@@ -1,41 +1,37 @@
 <script lang="ts">
-  import { writable } from "svelte/store";
   import Clock from "../lib/Clock.svelte";
   import GameGrid from "../lib/GameGrid.svelte";
   import LiveCodeDisplay from "../lib/LiveCodeDisplay.svelte";
-  import { gameStore, pollingIntervalIdStore, systemTimeStore } from "../store";
-    import { buildGameUrl, buildGamesUrl } from "../endpoints";
-  let bias = "";
+  import { biasStore, gameStore, systemTimeStore } from "../store";
+  import { buildGamesUrl, buildSetBiasUrl } from "../endpoints";
+  import { HttpService } from "../services/HttpService";
+  import type { Game as GameDef } from "../types/Game";
+  import RequiresAuthButton from "../lib/RequiresAuthButton.svelte";
 
   async function startGame() {
     await createGame();
-    pollingIntervalIdStore.set(setInterval(async () => {
-      if($gameStore?.id) {
-        await refreshGame($gameStore.id);
-      }
-    }, 2000));
   }
 
-  function stopGame() {
-    gameStore.set(undefined)
+  async function stopGame() {
+    await HttpService.delete(`${buildGamesUrl()}`);
+    gameStore.set(undefined);
     systemTimeStore.set(0);
-    clearInterval($pollingIntervalIdStore);
+    biasStore.set("");
   }
 
   async function createGame() {
-    const response = await fetch(`${buildGamesUrl()}?bias=${bias}`, { method: "POST" });
-    const {game: fetchedGame, systemTime: fetchedSystemTime } = await response.json();
-    console.log(fetchedGame);
+    const { game: fetchedGame, systemTime: fetchedSystemTime } =
+      await await HttpService.post<{ game: GameDef; systemTime: number }>(
+        `${buildGamesUrl()}?bias=${$biasStore.charAt(0)}`,
+        {},
+      );
     gameStore.set(fetchedGame);
     systemTimeStore.set(fetchedSystemTime);
   }
 
-  async function refreshGame(gameId: string) {
-    const response = await fetch(`${buildGameUrl(gameId)}?bias=${bias}`, { method: "PUT" });
-    const {game: fetchedGame, systemTime: fetchedSystemTime } = await response.json();
-    console.log(fetchedGame);
-    gameStore.set(fetchedGame);
-    systemTimeStore.set(fetchedSystemTime);
+  async function onCharacterInputChange() {
+    await HttpService.put(buildSetBiasUrl($biasStore.charAt(0)), {});
+    //TODO: Give feedback on error
   }
 </script>
 
@@ -43,29 +39,36 @@
   <div class="flex justify-between relative">
     <div class="flex flex-col">
       <p>Bias:</p>
-      <input type="text" placeholder="Character" bind:value={bias} />
+      <input
+        type="text"
+        placeholder="Character"
+        disabled={!$gameStore}
+        class={`${$gameStore ? "cursor-auto" : "cursor-not-allowed"}`}
+        on:change={onCharacterInputChange}
+        bind:value={$biasStore}
+      />
     </div>
     <div class="absolute left-[50%] right-[50%] translate-x-[-50%] w-[10%]">
       <Clock time={$systemTimeStore} />
     </div>
     <div class="min-w-40 flex justify-end">
-      <button on:click={() => $gameStore ? stopGame() : startGame()}>
+      <RequiresAuthButton
+        onClick={() => ($gameStore ? stopGame() : startGame())}
+      >
         {#if $gameStore}
           Stop
         {:else}
           Generate 2D Grid
         {/if}
-      </button>
+      </RequiresAuthButton>
     </div>
   </div>
   <div class="flex items-center justify-center flex-1">
     {#if $gameStore}
       <GameGrid grid={$gameStore.grid} />
     {:else}
-      <div>
-        To start generate a new grid
-      </div>
+      <div>To start generate a new grid</div>
     {/if}
   </div>
-  <LiveCodeDisplay isLive={!!$gameStore} code={$gameStore?.code ?? ''} />
+  <LiveCodeDisplay isLive={!!$gameStore} code={$gameStore?.code ?? ""} />
 </div>
